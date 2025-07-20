@@ -1,0 +1,43 @@
+import numpy as np
+
+# Функция потерь (например, квадратичная функция)
+def loss_function(theta):
+    return np.sum(theta**2)
+
+# Градиент функции потерь
+def gradient(theta):
+    return 2 * theta
+
+# Nesterov Accelerated Gradient
+def nesterov_accelerated_gradient(initial_theta, learning_rate, momentum, num_iterations):
+    theta = initial_theta
+    v = np.zeros_like(theta)  # Инициализация скорости
+
+    for i in range(num_iterations):
+        # Предварительное обновление
+        theta_temp = theta + momentum * v
+        
+        # Вычисление градиента
+        g = gradient(theta_temp)
+        
+        # Обновление скорости
+        v = momentum * v - learning_rate * g
+        
+        # Обновление параметров
+        theta += v
+        
+        # Вывод информации о текущем состоянии
+        if i % 10 == 0:  # Вывод каждые 10 итераций
+            print(f"Iteration {i}: Loss = {loss_function(theta)}")
+
+    return theta
+
+# Параметры
+initial_theta = np.array([5.0, 5.0])  # Начальные параметры
+learning_rate = 0.1  # Размер шага
+momentum = 0.9  # Коэффициент моментума
+num_iterations = 100  # Количество итераций
+
+# Запуск NAG
+optimal_theta = nesterov_accelerated_gradient(initial_theta, learning_rate, momentum, num_iterations)
+print(f"Optimal parameters: {optimal_theta}")
